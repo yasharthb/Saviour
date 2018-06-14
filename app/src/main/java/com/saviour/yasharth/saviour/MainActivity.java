@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//     startActivity( new Intent(MainActivity.this, MapsActivity.class));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
