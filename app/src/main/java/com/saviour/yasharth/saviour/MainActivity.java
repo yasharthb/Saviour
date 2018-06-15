@@ -293,8 +293,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
     protected void sendSMSMessage() {
-        phoneNo = "9521207014";
-        message = "Please Help Me at Location Provided in the Link :\n"+URL;
+        phoneNo = "7080104648";
+        message = "Please Help Me at Location provided in the Link :\n"+URL;
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -305,6 +305,12 @@ public class MainActivity extends AppCompatActivity
                         new String[]{Manifest.permission.SEND_SMS},
                         MY_PERMISSIONS_REQUEST_SEND_SMS);
             }
+        }
+        else{
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, message, null, null);
+            Toast.makeText(getApplicationContext(), "SMS sent.",
+                    Toast.LENGTH_LONG).show();
         }
     } /*   @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
