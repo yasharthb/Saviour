@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.saviour.yasharth.saviour">
+
+    <application>
+        <activity
+            android:name="com.saviour.yasharth.saviour.ContactActivity"
+            android:label="@string/title_activity_contact"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+</manifest>

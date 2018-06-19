@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
 
@@ -126,9 +127,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            startActivity(new Intent(MainActivity.this, ContactActivity.class));
+// Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(MainActivity.this, MapsActivity.class));
+          //  startActivity(new Intent(MainActivity.this, MapsActivity.class));
 
         } else if (id == R.id.nav_manage) {
 
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity
                  URL= "https://www.google.com/maps?z=12&t=m&q="+latLng.latitude+","+latLng.longitude;
               //  Toast.makeText(MainActivity.this, "permission denied", Toast.LENGTH_LONG).show();
                 //move map camera
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
             }
         }
     };
