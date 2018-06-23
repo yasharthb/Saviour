@@ -21,10 +21,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_contact" />
+    <include
+        layout="@layout/content_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/button1"
         android:layout_width="79dp"
         android:layout_height="89dp"
         android:layout_gravity="bottom|end"

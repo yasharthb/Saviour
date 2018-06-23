@@ -40,6 +40,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, ContactActivity.class));
 // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-          //  startActivity(new Intent(MainActivity.this, MapsActivity.class));
+           startActivity(new Intent(MainActivity.this, MapsActivity.class));
 
         } else if (id == R.id.nav_manage) {
 
@@ -162,8 +166,8 @@ public class MainActivity extends AppCompatActivity
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(120000); // two minute interval
-        mLocationRequest.setFastestInterval(120000);
+        mLocationRequest.setInterval(30000);
+        mLocationRequest.setFastestInterval(3000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -202,11 +206,9 @@ public class MainActivity extends AppCompatActivity
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
                  URL= "https://www.google.com/maps?z=12&t=m&q="+latLng.latitude+","+latLng.longitude;
-              //  Toast.makeText(MainActivity.this, "permission denied", Toast.LENGTH_LONG).show();
-                //move map camera
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
             }
         }
@@ -294,8 +296,29 @@ public class MainActivity extends AppCompatActivity
             // permissions this app might request
         }
     }
-    protected void sendSMSMessage() {
-        phoneNo = "7080104648";
+    protected  void sendSMSMessage() {
+      String phn[]= new String[10];
+      int i=0,j;
+
+        try {
+           // File myFile = new File("emergencyNumbers.txt");
+            FileInputStream fIn = openFileInput("emergencyNumbers.txt");
+            BufferedReader myReader = new BufferedReader(
+                    new InputStreamReader(fIn));
+                while(i<10)
+            {
+                      phn[i]=myReader.readLine();
+                      if(phn[i]!=null)
+                      Toast.makeText(this,phn[i],Toast.LENGTH_SHORT).show();
+                       i++;
+                  }
+
+            myReader.close();
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Please add Emergency Contacts",
+                    Toast.LENGTH_SHORT).show();
+        }
+        //phoneNo = "7080104648;
         message = "Please Help Me at Location provided in the Link :\n"+URL;
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
@@ -310,26 +333,12 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNo, null, message, null, null);
-            Toast.makeText(getApplicationContext(), "SMS sent.",
+            for(j=0;(phn[j] != null)&&(j<10);j++) {
+                smsManager.sendTextMessage(phn[j], null, message, null, null);
+            }
+            Toast.makeText(getApplicationContext(), "SMS sent to "+j+" Contacts",
                     Toast.LENGTH_LONG).show();
         }
-    } /*   @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNo, null, message, null, null);
-                    Toast.makeText(getApplicationContext(), "SMS sent.",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-        }    }*/
+    }
 
 }
