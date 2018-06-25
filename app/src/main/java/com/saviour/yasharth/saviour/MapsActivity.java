@@ -47,17 +47,17 @@ public class MapsActivity extends AppCompatActivity
     Location mLastLocation;
     Marker mCurrLocationMarker;
     FusedLocationProviderClient mFusedLocationClient;
+    String Speed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps2);
 
       //  getSupportActionBar().setTitle("Map Location Activity");
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFrag.getMapAsync(this);
     }
 
@@ -107,6 +107,7 @@ public class MapsActivity extends AppCompatActivity
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
                 Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+               // Speed=location.getSpeed())
                 mLastLocation = location;
                 if (mCurrLocationMarker != null) {
                     mCurrLocationMarker.remove();
@@ -117,6 +118,7 @@ public class MapsActivity extends AppCompatActivity
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
+               // markerOptions.snippet()
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
 

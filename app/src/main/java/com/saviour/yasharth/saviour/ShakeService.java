@@ -19,6 +19,7 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
     private Sensor mAccelerometer;
     public int check;
 
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -33,6 +34,7 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
         Toast.makeText(ShakeService.this, "Service is created!",Toast.LENGTH_LONG).show();
         Log.d(getPackageName(), "Created the Service!");
         check=1;
+
     }
     @Override
     public void onShake() {
@@ -40,18 +42,18 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
             Toast.makeText(ShakeService.this, "SHAKEN!", Toast.LENGTH_LONG).show();
             final Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vib.vibrate(500);
-              MainActivity ob= new MainActivity();
-              ob.sendSMSMessage();
+           MainActivity activity=MainActivity.instance;
+           activity.sendSMSMessage();
 //            Intent i = new Intent();
-//            i.setClass(this, M.class);
+//            i.setClass(this, MainActivity.class);
 //            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(i);
+//          startActivity(i);
         }
 
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+      return super.onStartCommand(intent, flags, startId);
 
     }
     public void onDestroy(){

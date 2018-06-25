@@ -53,7 +53,7 @@
              <!--You need a different API key for each encryption key, including the release key that is used to-->
              <!--sign the APK for publishing.-->
              <!--You can define the keys for the debug and release targets in src/debug/ and src/release/. >-->
-        <service android:enabled="true" android:name="com.saviour.yasharth.saviour.ShakeService"/>
+        <!--<service android:enabled="true" android:name="com.saviour.yasharth.saviour.ShakeService"/>-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD8yqqSr3cE0Dl7UZ7qL0mulCOVrpHASBA" />
@@ -70,6 +70,8 @@
         <activity
             android:name=".MapsActivity">
         </activity>
+        <service android:name=".ShakeService" android:enabled="true"/>
+
             <activity
                 android:name="com.saviour.yasharth.saviour.ContactActivity"
                 android:label="@string/title_activity_contact"

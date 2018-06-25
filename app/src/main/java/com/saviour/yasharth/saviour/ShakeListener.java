@@ -12,11 +12,11 @@ import java.lang.UnsupportedOperationException;
 
 public class ShakeListener implements SensorEventListener
 {
-    private static final int FORCE_THRESHOLD =0;    //10000  Values according to  a research paper.
-    private static final int TIME_THRESHOLD = 0;//75
-    private static final int SHAKE_TIMEOUT = 0;//500
-    private static final int SHAKE_DURATION = 0;//150
-    private static final int SHAKE_COUNT = 0;   //1
+    private static final int FORCE_THRESHOLD =10000;    //100000  Values according to  a research paper.
+    private static final int TIME_THRESHOLD = 75;//75
+    private static final int SHAKE_TIMEOUT = 500;//500
+    private static final int SHAKE_DURATION =150;//150
+    private static final int SHAKE_COUNT = 1;
 
     private SensorManager mSensorMgr;
     private float mLastX=-1.0f, mLastY=-1.0f, mLastZ=-1.0f;
@@ -30,9 +30,10 @@ public class ShakeListener implements SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-       //Toast.makeText(this,"Im in On Sensor Changed",Toast.LENGTH_LONG).show();
+      // Toast.makeText(MainActivity.this,"Im in On Sensor Changed",Toast.LENGTH_LONG).show();
 
-        if (event.sensor != mAccelerator) return;
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+
         long now = System.currentTimeMillis();
 
       if ((now - mLastForce) > SHAKE_TIMEOUT) {

@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,7 +49,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
-
+    static MainActivity instance;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
@@ -65,11 +66,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+       instance=this;
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         setSupportActionBar(toolbar);
-
+        Switch service=(Switch)findViewById(R.id.service) ;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //     startActivity( new Intent(MainActivity.this, MapsActivity.class));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity
            startActivity(new Intent(MainActivity.this, MapsActivity.class));
 
         } else if (id == R.id.nav_manage) {
-
+         startService(new Intent(MainActivity.this,ShakeService.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
