@@ -30,7 +30,7 @@ public class ShakeListener implements SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-      // Toast.makeText(MainActivity.this,"Im in On Sensor Changed",Toast.LENGTH_LONG).show();
+     // Toast.makeText(,"Im in On Sensor Changed",Toast.LENGTH_LONG).show();
 
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
 

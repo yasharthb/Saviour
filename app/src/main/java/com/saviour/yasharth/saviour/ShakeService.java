@@ -31,7 +31,7 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShaker = new ShakeListener(this);
         mShaker.setOnShakeListener(this);
-        Toast.makeText(ShakeService.this, "Service is created!",Toast.LENGTH_LONG).show();
+        Toast.makeText(ShakeService.this, "Automatic Tracking Active!",Toast.LENGTH_LONG).show();
         Log.d(getPackageName(), "Created the Service!");
         check=1;
 

@@ -90,6 +90,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission_group.CONTACTS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission_group.CONTACTS)) {
+//            } else {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission_group.CONTACTS},0);
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission_group.SENSORS,},
+//                        0);
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.pe
+//            }
+//        }
+//        else{
+//
+//        }
     }
 
     @Override
@@ -187,6 +206,10 @@ public class MainActivity extends AppCompatActivity
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             mGoogleMap.setMyLocationEnabled(true);
         }
+
+
+
+
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
