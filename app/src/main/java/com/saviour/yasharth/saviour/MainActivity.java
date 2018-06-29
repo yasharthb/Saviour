@@ -70,9 +70,12 @@ public class MainActivity extends AppCompatActivity
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         setSupportActionBar(toolbar);
+
         Switch service=(Switch)findViewById(R.id.service) ;
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//     startActivity( new Intent(MainActivity.this, MapsActivity.class));
+
+        //     startActivity( new Intent(MainActivity.this, MapsActivity.class));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,8 +330,7 @@ public class MainActivity extends AppCompatActivity
         try {
            // File myFile = new File("emergencyNumbers.txt");
             FileInputStream fIn = openFileInput("emergencyNumbers.txt");
-            BufferedReader myReader = new BufferedReader(
-                    new InputStreamReader(fIn));
+            BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
                 while(i<10)
             {
                       phn[i]=myReader.readLine();

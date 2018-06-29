@@ -71,7 +71,7 @@
             android:name=".MapsActivity">
         </activity>
         <service android:name=".ShakeService" android:enabled="true"/>
-
+        <activity android:name=".selContacts"></activity>
             <activity
                 android:name="com.saviour.yasharth.saviour.ContactActivity"
                 android:label="@string/title_activity_contact"
