@@ -3,6 +3,7 @@ package com.saviour.yasharth.saviour;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -41,7 +42,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
     List<String> name1 = new ArrayList<String>();
     List<String> phno1 = new ArrayList<String>();
     MyAdapter ma ;
-   FloatingActionButton select;
+   FloatingActionButton select,select2;
     EditText inputSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +63,22 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         // adding
         select = (FloatingActionButton) findViewById(R.id.button1);
 
+        select2 = (FloatingActionButton) findViewById(R.id.button2);
+
+        select2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ContactActivity.this,selContacts.class));
+            }
+        });
+
         select.setOnClickListener(new View.OnClickListener()
         {
 
             @Override
             public void onClick(View v) {
                 StringBuilder checkedcontacts= new StringBuilder();
+
 
                 for(int i = 0; i < phno1.size(); i++)
 
@@ -76,6 +87,8 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                     {
                         checkedcontacts.append(phno1.get(i).toString());
                         checkedcontacts.append("\n");
+                    }
+                }
                         try {
 //                            File myFile = new File(emergencyNumbers.txt");
 //                            myFile.createNewFile();
@@ -92,15 +105,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                         Toast.makeText(getApplicationContext(),
                                 "The emergency contact numbers have been saved.",
                                 Toast.LENGTH_SHORT).show();
-
-                    }
-                    else
-                    {
-
-                    }
-
-
-                }
 
                 Toast.makeText(ContactActivity.this, checkedcontacts ,Toast.LENGTH_SHORT).show();
             }

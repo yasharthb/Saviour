@@ -5,9 +5,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView8"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="@dimen/activity_horizontal_margin" />
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:textAlignment="center"
+        android:textColor="#303F9F"/>
 </LinearLayout>
