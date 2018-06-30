@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            startActivity(new Intent(MainActivity.this, ContactActivity.class));
+            startActivity(new Intent(MainActivity.this,selContacts.class));
 // Handle the camera action
         } else if (id == R.id.nav_gallery) {
            startActivity(new Intent(MainActivity.this, MapsActivity.class));

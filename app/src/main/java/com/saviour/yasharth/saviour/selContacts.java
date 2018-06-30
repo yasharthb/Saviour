@@ -1,7 +1,10 @@
 package com.saviour.yasharth.saviour;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,16 +21,28 @@ public class selContacts extends AppCompatActivity {
     ListView simpleList;
     //String countryList[] = {"India", "China", "Australia", "Portugal", "America", "New Zealand"};
 
+    FloatingActionButton select2;
+
     @Override   protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);      setContentView(R.layout.activity_sel_contacts);
         simpleList = (ListView)findViewById(R.id.simpleListView);
       //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, countryList);
         //simpleList.setAdapter(arrayAdapter);
+        select2 = (FloatingActionButton) findViewById(R.id.button2);
+
+        select2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(selContacts.this,ContactActivity.class));
+            }
+        });
+
 
         String phn1[]= new String[10];
         int i=0;
         for ( i = 0; i<10;i++)
             phn1[i] = "Add";
+
 
 
         i = 0;

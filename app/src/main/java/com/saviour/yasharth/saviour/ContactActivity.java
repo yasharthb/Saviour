@@ -42,7 +42,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
     List<String> name1 = new ArrayList<String>();
     List<String> phno1 = new ArrayList<String>();
     MyAdapter ma ;
-   FloatingActionButton select,select2;
+   FloatingActionButton select;
     EditText inputSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +63,9 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         // adding
         select = (FloatingActionButton) findViewById(R.id.button1);
 
-        select2 = (FloatingActionButton) findViewById(R.id.button2);
 
-        select2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ContactActivity.this,selContacts.class));
-            }
-        });
+
+
 
         select.setOnClickListener(new View.OnClickListener()
         {
