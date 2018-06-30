@@ -38,7 +38,7 @@ public class selContacts extends AppCompatActivity {
         });
 
 
-        String phn1[]= new String[10];
+        String phn1[]= new String[100];
 
 
 
@@ -48,7 +48,7 @@ public class selContacts extends AppCompatActivity {
             FileInputStream fIn = openFileInput("emergencyNumbers.txt");
             BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
                 //phn1[0]= null;
-                while(i<10) {
+                while(i<100) {
 
                     phn1[i] = myReader.readLine();
 

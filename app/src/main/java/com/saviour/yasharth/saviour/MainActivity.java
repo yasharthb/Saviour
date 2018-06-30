@@ -324,20 +324,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
     protected  void sendSMSMessage() {
-      String phn[]= new String[10];
+      String phn[]= new String[100];
       int i=0,j;
 
         try {
            // File myFile = new File("emergencyNumbers.txt");
             FileInputStream fIn = openFileInput("emergencyNumbers.txt");
             BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
-                while(i<10)
-            {
+                while(i<100)
+                {
                       phn[i]=myReader.readLine();
                       if(phn[i]!=null)
                       Toast.makeText(this,phn[i],Toast.LENGTH_SHORT).show();
+                      else if(phn[i]==null) break;
                        i++;
-                  }
+                }
 
             myReader.close();
         } catch (Exception e) {
@@ -359,7 +360,7 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             SmsManager smsManager = SmsManager.getDefault();
-            for(j=0;(phn[j] != null)&&(j<10);j++) {
+            for(j=0;(j<100)&&(phn[j] != null);j++) {
                 smsManager.sendTextMessage(phn[j], null, message, null, null);
             }
             Toast.makeText(getApplicationContext(), "SMS sent to "+j+" Contacts",
