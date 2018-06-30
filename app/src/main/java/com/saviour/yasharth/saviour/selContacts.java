@@ -39,24 +39,23 @@ public class selContacts extends AppCompatActivity {
 
 
         String phn1[]= new String[10];
-        int i=0;
-        for ( i = 0; i<10;i++)
-            phn1[i] = "Add";
 
 
 
-        i = 0;
+
+        int i = 0;
         try {
             FileInputStream fIn = openFileInput("emergencyNumbers.txt");
             BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
                 //phn1[0]= null;
                 while(i<10) {
 
+                    phn1[i] = myReader.readLine();
+
                     if(phn1[i]==null) {
                         phn1[i]= "Add";
                         break;
                     }
-                    phn1[i] = myReader.readLine();
                     i++;
                 }
             myReader.close();
@@ -69,16 +68,19 @@ public class selContacts extends AppCompatActivity {
         catch(Exception e){
 
         }
-        String countryList[] = {"India", "China", "australia", "Portugal", "America", "NewZealand"};
+        //String countryList[] = {"India", "China", "australia", "Portugal", "America", "NewZealand"};
        // countryList[0] = phn1[0];
         //countryList[1] = phn1[1];
         //countryList[2] = phn1[2];
 
-        for ( i = 0; i<10;i++) {
-            if(phn1[i]==null)
-                phn1[i] = "Add";
+
+
+        String phn2[]=new String[i];
+
+        for ( i = 0; i<phn2.length;i++) {
+            phn2[i]=phn1[i];
         }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn1);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn2);
         simpleList.setAdapter(arrayAdapter);
 
 
