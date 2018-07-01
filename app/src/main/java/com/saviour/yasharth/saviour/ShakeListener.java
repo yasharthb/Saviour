@@ -27,6 +27,7 @@ public class ShakeListener implements SensorEventListener
     private long mLastShake;
     private long mLastForce;
     private Sensor mAccelerator;
+    private int shakeGestureCount=0;
 
     @Override
     public void onSensorChanged(SensorEvent event) {

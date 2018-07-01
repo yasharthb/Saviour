@@ -111,7 +111,8 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-         //       ContactActivity.this.ma.tv.setFilters();
+         //       ContactActivity.this.ma.tv.setFilters()
+              //  ma.getFilter().filter(cs);
             }
 
             @Override
@@ -212,5 +213,8 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
             mCheckStates.put((Integer) buttonView.getTag(), isChecked);
         }
-    }
+
+
+        }
+
 }

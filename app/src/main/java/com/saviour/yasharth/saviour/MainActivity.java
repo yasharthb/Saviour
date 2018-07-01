@@ -24,7 +24,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,6 +42,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,11 +63,15 @@ public class MainActivity extends AppCompatActivity
     static final int MY_PERMISSIONS_REQUEST_SEND_SMS=0;
     String phoneNo;
     String message;
+    ImageView imageview;
+    TextView tv1,tv2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
        instance=this;
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -90,25 +97,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-//
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission_group.CONTACTS)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                    Manifest.permission_group.CONTACTS)) {
-//            } else {
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission_group.CONTACTS},0);
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission_group.SENSORS,},
-//                        0);
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.pe
-//            }
-//        }
-//        else{
-//
-//        }
+        View header=navigationView.getHeaderView(0);
+        imageview=(ImageView )header.findViewById(R.id.imageView);
+        tv1=(TextView)header.findViewById(R.id.text_name);
+        tv2=(TextView)header.findViewById(R.id.text_email);
+
+        if(LoginActivity.gAccount!=null) {
+          //  imageview.setImageURI(LoginActivity.gAccount.getPhotoUrl());
+            tv1.setText(LoginActivity.gAccount.getDisplayName());
+            tv2.setText(LoginActivity.gAccount.getEmail());
+            Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl()).into(imageview);
+        }
+
     }
 
     @Override
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
          startService(new Intent(MainActivity.this,ShakeService.class));
         } else if (id == R.id.nav_share) {
+            startActivity(new Intent(MainActivity.this,LoginActivity.class));
 
         } else if (id == R.id.nav_send) {
 
