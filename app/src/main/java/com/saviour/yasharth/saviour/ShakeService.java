@@ -42,18 +42,20 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
             Toast.makeText(ShakeService.this, "SHAKEN!", Toast.LENGTH_LONG).show();
             final Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vib.vibrate(500);
+
            MainActivity activity=MainActivity.instance;
-           activity.sendSMSMessage();
-//            Intent i = new Intent();
-//            i.setClass(this, MainActivity.class);
-//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//          startActivity(i);
+           if(activity==null) {
+               startActivity(new Intent(ShakeService.this, MainActivity.class));
+               activity = MainActivity.instance;
+           }
+           activity.alertD();
         }
 
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-      return super.onStartCommand(intent, flags, startId);
+        return  START_STICKY;
+      //return super.onStartCommand(intent, flags, startId);
 
     }
     public void onDestroy(){

@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -42,6 +44,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
@@ -49,6 +53,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
@@ -65,6 +71,8 @@ public class MainActivity extends AppCompatActivity
     String message;
     ImageView imageview;
     TextView tv1,tv2;
+    boolean result= false;
+    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +91,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSMSMessage();
+                alertD();
+           //     sendSMSMessage();
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     //    .setAction("Action", null).show();
             }
@@ -103,10 +112,12 @@ public class MainActivity extends AppCompatActivity
         tv2=(TextView)header.findViewById(R.id.text_email);
 
         if(LoginActivity.gAccount!=null) {
-          //  imageview.setImageURI(LoginActivity.gAccount.getPhotoUrl());
+
             tv1.setText(LoginActivity.gAccount.getDisplayName());
             tv2.setText(LoginActivity.gAccount.getEmail());
-            Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl()).into(imageview);
+            Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl())
+                    .error(R.drawable.googleg_standard_color_18)
+                    .into(imageview);
         }
 
     }
@@ -162,6 +173,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,LoginActivity.class));
 
         } else if (id == R.id.nav_send) {
+            LoginActivity.mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                                    LoginActivity.mGoogleSignInClient.revokeAccess();
+                                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                                    finish();
+                }
+            });
 
         }
 
@@ -325,6 +344,7 @@ public class MainActivity extends AppCompatActivity
       String phn[]= new String[10];
       int i=0,j;
 
+
         try {
            // File myFile = new File("emergencyNumbers.txt");
             FileInputStream fIn = openFileInput("emergencyNumbers.txt");
@@ -364,6 +384,51 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "SMS sent to "+j+" Contacts",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    protected void alertD() {
+        count=0;
+        result=false;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Send Emergency Messages Alert");
+        builder.setMessage("After 45 seconds Emergency Contacts will be notified automatically!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Send alert!!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                count=1;
+                sendSMSMessage();
+            }
+        });
+
+        builder.setNegativeButton("I'm Safe.", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                result=true;
+
+            }
+        });
+
+        final AlertDialog dlg = builder.create();
+
+        dlg.show();
+        new Handler().postDelayed(new Runnable() {
+
+            public void run() {
+                dlg.dismiss();
+                if((!result)&&(count==0))
+                sendSMSMessage();
+            }
+        }, 5000);
+
+
+//        final Timer t = new Timer();
+//        t.schedule(new TimerTask() {
+//            public void run() {
+//                dlg.dismiss(); // when the task active then close the dialog
+//                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+//            }
+//        }, 5000); // after 2 second (or 2000 miliseconds), the task will be active.
+
     }
 
 }

@@ -74,8 +74,8 @@ public class LoginActivity extends AppCompatActivity {// LoaderCallbacks<Cursor>
 //    private EditText mPasswordView;
    ProgressBar mProgress;
 //    private View mLoginFormView;
-    SignInButton signInButton;
-    GoogleSignInClient  mGoogleSignInClient;
+  static  SignInButton signInButton;
+   static GoogleSignInClient  mGoogleSignInClient;
     static GoogleSignInAccount gAccount;
 
 
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {// LoaderCallbacks<Cursor>
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(this,account.getEmail(),Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,account.getEmail(),Toast.LENGTH_SHORT).show();
             // Signed in successfully, show authenticated UI.
             updateUI(account);
         } catch (ApiException e) {
