@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.SwitchCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity
     TextView tv1,tv2;
     boolean result= false;
     int count=0;
+    SwitchCompat switchCompat;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +86,11 @@ public class MainActivity extends AppCompatActivity
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
        instance=this;
+       intent=new Intent(MainActivity.this,ShakeService.class);
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         setSupportActionBar(toolbar);
-        Switch service=(Switch)findViewById(R.id.service) ;
+        switchCompat=(SwitchCompat)findViewById(R.id.switchCompat);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //     startActivity( new Intent(MainActivity.this, MapsActivity.class));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +102,28 @@ public class MainActivity extends AppCompatActivity
                     //    .setAction("Action", null).show();
             }
         });
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                {
+                    startService(intent);
+                }
+                else
+                {
+                    stopService(intent);
+                }
+
+
+//                Snackbar.make(buttonView, "Switch state checked "+isChecked, Snackbar.LENGTH_LONG)
+//                        .setAction("ACTION",null).show();
+            }
+        });
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -115,9 +142,10 @@ public class MainActivity extends AppCompatActivity
 
             tv1.setText(LoginActivity.gAccount.getDisplayName());
             tv2.setText(LoginActivity.gAccount.getEmail());
-            Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl())
-                    .error(R.drawable.googleg_standard_color_18)
-                    .into(imageview);
+            if(LoginActivity.gAccount.getPhotoUrl()==null)
+                Picasso.with(this).load(R.drawable.googleg_standard_color_18).into(imageview);
+            else
+            Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl()).into(imageview);
         }
 
     }
@@ -247,10 +275,12 @@ public class MainActivity extends AppCompatActivity
 
                 //Place current location marker
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                String s=""+mLastLocation.getSpeed()+ "m/s";
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                markerOptions.snippet(s);
+;                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
                  URL= "https://www.google.com/maps?z=12&t=m&q="+latLng.latitude+","+latLng.longitude;
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));

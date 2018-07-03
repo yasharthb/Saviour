@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.telephony.SmsManager;
@@ -43,12 +44,28 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
             final Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vib.vibrate(500);
 
-           MainActivity activity=MainActivity.instance;
-           if(activity==null) {
-               startActivity(new Intent(ShakeService.this, MainActivity.class));
-               activity = MainActivity.instance;
+            MainActivity activity=MainActivity.instance;
+               if(activity==null){
+               Intent intent = new Intent(ShakeService.this, LoginActivity.class);
+               intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP); // You need this if starting
+               //  the activity from a service
+               intent.setAction(Intent.ACTION_MAIN);
+               intent.addCategory(Intent.CATEGORY_LAUNCHER);
+               startActivity(intent);
+                   new Handler().postDelayed(new Runnable() {
+
+                       public void run() {
+                           MainActivity.instance.alertD();
+                       }
+                   }, 3000);
+
            }
-           activity.alertD();
+           else{
+                   Intent intent = new Intent(ShakeService.this, MainActivity.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                   startActivity(intent);
+                   MainActivity.instance.alertD();
+               }
         }
 
     }
