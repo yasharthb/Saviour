@@ -7,13 +7,16 @@
     android:orientation="vertical"
     tools:context=".selContacts">
 
-    <ListView
-        android:id="@+id/simpleListView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/material_blue_grey_800"
-        android:dividerHeight="1dp"
-        app:layout_constraintDimensionRatio="w,1:1" />
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/recyclerView"
+        android:layout_height="match_parent">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button2"

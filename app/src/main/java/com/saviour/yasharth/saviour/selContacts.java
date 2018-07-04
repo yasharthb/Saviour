@@ -7,8 +7,12 @@ import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,15 +28,18 @@ import java.util.List;
 
 public class selContacts extends AppCompatActivity {
 
-    ListView simpleList;
+   // ListView simpleList;
     //String countryList[] = {"India", "China", "Australia", "Portugal", "America", "New Zealand"};
-
+   List<String> phn2;
     FloatingActionButton select2;
     public final int PICK_CONTACT = 2015;
 
     @Override   protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);      setContentView(R.layout.activity_sel_contacts);
-        simpleList = (ListView)findViewById(R.id.simpleListView);
+     //
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        //  simpleList = (ListView)findViewById(R.id.simpleListView);
       //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, countryList);
         //simpleList.setAdapter(arrayAdapter);
         select2 = (FloatingActionButton) findViewById(R.id.button2);
@@ -48,15 +55,8 @@ public class selContacts extends AppCompatActivity {
 
 
 
-
-
-
         String phn1[]= new String[100];
-
-
-
-
-        int i = 0;
+        int j;int i = 0;
         try {
             FileInputStream fIn = openFileInput("emergencyNames.txt");
             BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
@@ -81,20 +81,22 @@ public class selContacts extends AppCompatActivity {
         catch(Exception e){
 
         }
-        //String countryList[] = {"India", "China", "australia", "Portugal", "America", "NewZealand"};
-       // countryList[0] = phn1[0];
-        //countryList[1] = phn1[1];
-        //countryList[2] = phn1[2];
 
+        j = i;
 
-
-        String phn2[]=new String[i];
-
-        for ( i = 0; i<phn2.length;i++) {
-            phn2[i]=phn1[i];
+        for ( i = 0; i<j;i++) {
+            phn2.add(phn1[i]);
         }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn2);
-        simpleList.setAdapter(arrayAdapter);
+        NAMAdapter adapter = new NAMAdapter(this,phn2);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
+        layoutmanager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutmanager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+              //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn2);
+        //simpleList.setAdapter(arrayAdapter);
 
 
     }
