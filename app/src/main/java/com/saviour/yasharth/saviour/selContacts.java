@@ -30,18 +30,19 @@ public class selContacts extends AppCompatActivity {
 
    // ListView simpleList;
     //String countryList[] = {"India", "China", "Australia", "Portugal", "America", "New Zealand"};
-   List<String> phn2;
+
     FloatingActionButton select2;
     public final int PICK_CONTACT = 2015;
 
     @Override   protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);      setContentView(R.layout.activity_sel_contacts);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sel_contacts);
      //
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        //  simpleList = (ListView)findViewById(R.id.simpleListView);
-      //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, countryList);
-        //simpleList.setAdapter(arrayAdapter);
+
+
+
         select2 = (FloatingActionButton) findViewById(R.id.button2);
 
         select2.setOnClickListener(new View.OnClickListener() {
@@ -55,23 +56,48 @@ public class selContacts extends AppCompatActivity {
 
 
 
+
+
+        String name1[] = new String[100];
+
+        List<EmergencyContacts> datalist = new ArrayList<>();
         String phn1[]= new String[100];
         int j;int i = 0;
         try {
             FileInputStream fIn = openFileInput("emergencyNames.txt");
             BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
-                //phn1[0]= null;
-                while(i<100) {
+            //phn1[0]= null;
+            while(i<100) {
 
-                    phn1[i] = myReader.readLine();
+                phn1[i] = myReader.readLine();
 
-                    if(phn1[i]==null) {
-                        phn1[i]= "Add";
-                        break;
-                    }
-                    i++;
+                if(phn1[i]==null) {
+                    phn1[i]= "Add";
+                    break;
                 }
+                i++;
+            }
             myReader.close();
+            fIn.close();
+
+
+            i =0;
+
+            FileInputStream fIn2 = openFileInput("emergencyNumbers.txt");
+            BufferedReader myReader2 = new BufferedReader( new InputStreamReader(fIn2));
+            //phn1[0]= null;
+            while(i<100) {
+
+                name1[i] = myReader2.readLine();
+
+                if(name1[i]==null) {
+                    name1[i]= "Add";
+                    break;
+                }
+                i++;
+            }
+            myReader2.close();
+            fIn2.close();
 
 
             //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn1);
@@ -83,23 +109,135 @@ public class selContacts extends AppCompatActivity {
         }
 
         j = i;
-
-        for ( i = 0; i<j;i++) {
-            phn2.add(phn1[i]);
+        for (int k=0;k<j;k++){
+            EmergencyContacts contact = new EmergencyContacts();
+            contact.setName(phn1[k]);
+            contact.setPhoneno(name1[k]);
+            datalist.add(contact);
         }
-        NAMAdapter adapter = new NAMAdapter(this,phn2);
+
+
+
+
+
+        //  simpleList = (ListView)findViewById(R.id.simpleListView);
+      //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, countryList);
+        //simpleList.setAdapter(arrayAdapter);
+
+
+
+
+
+        NAMAdapter adapter = new NAMAdapter(this,datalist);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
         layoutmanager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutmanager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
               //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn2);
         //simpleList.setAdapter(arrayAdapter);
+    }
 
+    public void removeContact(String phone)throws Exception{
+
+        Toast.makeText(this,phone+" here",Toast.LENGTH_SHORT).show();
+
+        String name1[] = new String[100];
+
+        String phn1[]= new String[100];
+
+        int i = 0;
+        try {
+            FileInputStream fIn = openFileInput("emergencyNumbers.txt");
+            BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn));
+            //phn1[0]= null;
+            while(i<100) {
+
+                phn1[i] = myReader.readLine();
+
+                if(phn1[i]==null) {
+                    phn1[i]= "Add";
+                    break;
+                }
+                i++;
+            }
+            myReader.close();
+            fIn.close();
+
+
+            i = 0;
+
+            FileInputStream fIn2 = openFileInput("emergencyNames.txt");
+            BufferedReader myReader2 = new BufferedReader( new InputStreamReader(fIn2));
+            //phn1[0]= null;
+            while(i<100) {
+
+                name1[i] = myReader2.readLine();
+
+                if(name1[i]==null) {
+                    name1[i]= "Add";
+                    break;
+                }
+                i++;
+            }
+            myReader2.close();
+            fIn2.close();
+
+
+            //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.textView8, phn1);
+            //simpleList.setAdapter(arrayAdapter);
+
+        }
+        catch(Exception e){
+
+        }
+
+
+
+        StringBuilder checkedNames= new StringBuilder();
+        StringBuilder checkedNumbers= new StringBuilder();
+
+
+        for (int q = 0; q < i; q++){
+
+            if(phone.compareTo(name1[q])!=0){
+
+
+                checkedNames.append(name1[q]);
+                checkedNumbers.append(phn1[q]);
+
+                checkedNames.append("\n");
+                checkedNumbers.append("\n");
+
+            }
+            else {
+                Toast.makeText(this,phone,Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+        FileOutputStream fOut = openFileOutput("emergencyNumbers.txt",MODE_PRIVATE);
+        FileOutputStream fOut1 = openFileOutput("emergencyNames.txt",MODE_PRIVATE);
+
+        OutputStreamWriter myOutWriter =
+                new OutputStreamWriter(fOut);
+
+        OutputStreamWriter myOutWriter1 =
+                new OutputStreamWriter(fOut1);
+
+        myOutWriter.write(checkedNumbers.toString());
+        myOutWriter1.write(checkedNames.toString());
+
+
+        myOutWriter.close();
+        fOut.close();
+        myOutWriter1.close();
+        fOut1.close();
 
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
@@ -119,7 +257,7 @@ public class selContacts extends AppCompatActivity {
 
                 OutputStreamWriter myOutWriter =
                         new OutputStreamWriter(fOut);
-               // myOutWriter.write(checkedcontacts.toString());
+
                 myOutWriter.write(cursor.getString(column)+"\n");
 
                 myOutWriter1.write(contactNumberName+"\n");
@@ -136,4 +274,5 @@ public class selContacts extends AppCompatActivity {
             }
         }
     }
+
 }
