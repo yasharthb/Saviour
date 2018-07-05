@@ -1,7 +1,9 @@
 package com.saviour.yasharth.saviour;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -54,6 +56,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     FusedLocationProviderClient mFusedLocationClient;
     static String URL;
     static final int MY_PERMISSIONS_REQUEST_SEND_SMS=0;
+    static  final int MULTIPLE_PERMISSIONS=10;
     String phoneNo;
     String message;
     ImageView imageview;
@@ -77,16 +81,37 @@ public class MainActivity extends AppCompatActivity
     int count=0;
     SwitchCompat switchCompat;
     Intent intent;
+    ShakeService mShakeService;
+    static boolean flag=false;
+    Context ctx;
+    String[] permissions= new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission_group.CONTACTS,
+            Manifest.permission.GET_ACCOUNTS,
+            Manifest.permission.BODY_SENSORS,
+            Manifest.permission.VIBRATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.SEND_SMS
+    };
+
+    public Context getCtx() {
+        return ctx;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ctx = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
        instance=this;
-       intent=new Intent(MainActivity.this,ShakeService.class);
+       mShakeService=new ShakeService();
+        intent = new Intent(getCtx(), mShakeService.getClass());
+    //   intent=new Intent(MainActivity.this,ShakeService.class);
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         setSupportActionBar(toolbar);
@@ -102,24 +127,31 @@ public class MainActivity extends AppCompatActivity
                     //    .setAction("Action", null).show();
             }
         });
+        switchCompat.setChecked(isMyServiceRunning(mShakeService.getClass()));
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if(isChecked)
-                {
+                {   flag=false;
                     startService(intent);
                 }
                 else
                 {
+                    flag=true;
                     stopService(intent);
                 }
 
 
-//                Snackbar.make(buttonView, "Switch state checked "+isChecked, Snackbar.LENGTH_LONG)
-//                        .setAction("ACTION",null).show();
+
             }
         });
+
+
+
+//        if(checkPermissions()){
+//
+//        }
 
 
 
@@ -160,6 +192,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        stopService(intent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+
+    }
+
+
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
+    }
+
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -190,7 +251,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            startActivity(new Intent(MainActivity.this, ContactActivity.class));
+            startActivity(new Intent(MainActivity.this, selContacts.class));
 // Handle the camera action
         } else if (id == R.id.nav_gallery) {
            startActivity(new Intent(MainActivity.this, MapsActivity.class));
@@ -247,7 +308,8 @@ public class MainActivity extends AppCompatActivity
                 mGoogleMap.setMyLocationEnabled(true);
             } else {
                 //Request Location Permission
-                checkLocationPermission();
+                checkPermissions();
+                //checkLocationPermission();
             }
         }
         else {
@@ -325,6 +387,36 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //////////////////////////////////////
+    // code you want.
+
+
+//    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//    Manifest.permission.READ_CONTACTS,
+//    Manifest.permission.READ_EXTERNAL_STORAGE,
+//    Manifest.permission.GET_ACCOUNTS,
+
+
+    //  permissions  granted.
+
+
+    protected   boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p:permissions) {
+            result = ContextCompat.checkSelfPermission(MainActivity.this,p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),MULTIPLE_PERMISSIONS );
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -350,6 +442,20 @@ public class MainActivity extends AppCompatActivity
                     // functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
+            }
+                case MULTIPLE_PERMISSIONS:{
+                    if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                        // permissions granted.
+
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                        mGoogleMap.setMyLocationEnabled(true);
+                    } else {
+                        String perStr = "";
+                        for (String per : permissions) {
+                            perStr += "\n" + per;
+                        }
+                        // permissions list of don't granted permission
+                    }
                 return;
 
             }
@@ -449,15 +555,6 @@ public class MainActivity extends AppCompatActivity
                 sendSMSMessage();
             }
         }, 5000);
-
-
-//        final Timer t = new Timer();
-//        t.schedule(new TimerTask() {
-//            public void run() {
-//                dlg.dismiss(); // when the task active then close the dialog
-//                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//            }
-//        }, 5000); // after 2 second (or 2000 miliseconds), the task will be active.
 
     }
 

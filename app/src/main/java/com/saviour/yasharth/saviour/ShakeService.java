@@ -12,6 +12,8 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ShakeService extends Service implements ShakeListener.OnShakeListener {
@@ -78,6 +80,50 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
     public void onDestroy(){
         super.onDestroy();
         check=0;
+
         Log.d(getPackageName(),"Service Destroyed.");
+        if(!MainActivity.flag) {
+            Intent broadcastIntent = new Intent("com.saviour.yasharth.saviour.ActivityRecognition.RestartSensor");
+            sendBroadcast(broadcastIntent);
+            stoptimertask();
+        }
+    }
+
+
+    private Timer timer;
+    private TimerTask timerTask;
+    int counter=0;
+    long oldTime=0;
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+        initializeTimerTask();
+
+        //schedule the timer, to wake up every 1 second
+        timer.schedule(timerTask, 1000, 1000); //
+    }
+
+    /**
+     * it sets the timer to print the counter every x seconds
+     */
+    public void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            public void run() {
+                Log.i("in timer", "in timer ++++  "+ (counter++));
+            }
+        };
+    }
+
+    /**
+     * not needed
+     */
+    public void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 }

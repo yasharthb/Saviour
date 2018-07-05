@@ -14,7 +14,7 @@ public class ShakeListener implements SensorEventListener
 {
     private static final int FORCE_THRESHOLD =10000;    //100000  Values according to  a research paper.
     private static final int TIME_THRESHOLD = 75;//75
-    private static final int SHAKE_TIMEOUT = 500;//500
+    private static final int SHAKE_TIMEOUT = 5000;//500
     private static final int SHAKE_DURATION =150;//150
     private static final int SHAKE_COUNT = 1;
 
@@ -48,8 +48,9 @@ public class ShakeListener implements SensorEventListener
                 if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION)) {
                     mLastShake = now;
                     mShakeCount = 0;
-                    if (mShakeListener != null) {
+                    if ((mShakeListener != null)) {
                         mShakeListener.onShake();
+
                     }
                 }
                 mLastForce = now;

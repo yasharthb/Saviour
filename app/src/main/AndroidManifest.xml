@@ -75,11 +75,6 @@
             android:exported="true"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ContactActivity"
-            android:label="@string/title_activity_contact"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -88,6 +83,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+        <activity
+            android:name=".selContacts"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+
+        <receiver
+            android:name=".ServiceRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name="com.saviour.yasharth.saviour.ActivityRecognition.RestartSensor"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
