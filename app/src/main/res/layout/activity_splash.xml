@@ -4,17 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
-    android:background="#ffffff">
+    android:background="@drawable/gradient"
+    tools:context=".SplashActivity">
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:padding="87dp"
+        android:fitsSystemWindows="true"
         android:foregroundGravity="center_vertical"
-        android:src="@drawable/splash2"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="147dp"/>
+        android:src="@drawable/splash3" />
 
 </android.support.constraint.ConstraintLayout>

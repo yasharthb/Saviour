@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -72,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {// LoaderCallbacks<Cursor>
 //    // UI references.
 //    private AutoCompleteTextView mEmailView;
 //    private EditText mPasswordView;
-   ProgressBar mProgress;
 //    private View mLoginFormView;
   static  SignInButton signInButton;
    static GoogleSignInClient  mGoogleSignInClient;
@@ -82,10 +83,11 @@ public class LoginActivity extends AppCompatActivity {// LoaderCallbacks<Cursor>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mProgress=(ProgressBar)findViewById(R.id.login_progress);
-        mProgress.setVisibility(View.VISIBLE);
+//       l
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -122,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {// LoaderCallbacks<Cursor>
 
     protected void updateUI(GoogleSignInAccount account) {
         if (account == null) {
-            mProgress.setVisibility(View.GONE);
       //      signInButton.setVisibility(View.VISIBLE);
         } else {
                      gAccount=account;

@@ -35,16 +35,17 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:screenOrientation="portrait" />
         <!-- &lt;!&ndash; -->
         <!-- The API key for Google Maps-based APIs is defined as a string resource. -->
@@ -67,6 +68,8 @@
 
         <activity
             android:name=".MapsActivity"
+            android:label="Nearby Hospitals"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:screenOrientation="portrait" />
 
         <service
@@ -75,7 +78,8 @@
             android:exported="true"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,15 +87,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".selContacts"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+            android:label="Emergency Contacts"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:screenOrientation="portrait"></activity>
 
         <receiver
             android:name=".ServiceRestarterBroadcastReceiver"
@@ -99,9 +99,11 @@
             android:exported="true"
             android:label="RestartServiceWhenStopped">
             <intent-filter>
-                <action android:name="com.saviour.yasharth.saviour.ActivityRecognition.RestartSensor"/>
+                <action android:name="com.saviour.yasharth.saviour.ActivityRecognition.RestartSensor" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".AboutUs"></activity>
     </application>
 
 </manifest>

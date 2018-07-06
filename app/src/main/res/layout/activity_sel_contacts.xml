@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".selContacts">
+    tools:context=".selContacts"
+    android:background="@drawable/gradient"
+    >
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -24,6 +26,8 @@
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:tooltipText="Add Emergency Contacts"
+        />
 
 </android.support.constraint.ConstraintLayout>

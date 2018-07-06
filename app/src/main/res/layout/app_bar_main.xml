@@ -30,13 +30,16 @@
 
     <android.support.v7.widget.SwitchCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="55dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="\t\t\t\t\t\t\t\t\t\t\tAutomatic Tracking :"
+        android:text="\t\t\t\t\t\t\t\t\t\t\tAutomatic Tracking"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_lightitalic"
         android:checked="false"
         android:id="@+id/switchCompat"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary1"
+        android:theme="@style/Color1SwitchStyle"/>
 
 
 
@@ -46,6 +49,8 @@
         android:layout_height="152dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_button_sos" />
+        app:elevation="5dp"
+        android:src="@drawable/ic_button_sos"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
