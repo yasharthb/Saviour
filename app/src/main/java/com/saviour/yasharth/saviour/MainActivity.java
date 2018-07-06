@@ -61,6 +61,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import sun.applet.Main;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
     static MainActivity instance;
@@ -554,7 +556,7 @@ public class MainActivity extends AppCompatActivity
                 if((!result)&&(count==0))
                 sendSMSMessage();
             }
-        }, 5000);
+        }, 45000);
 
     }
 
