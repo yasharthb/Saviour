@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -45,10 +48,10 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
             Toast.makeText(ShakeService.this, "SHAKEN!", Toast.LENGTH_LONG).show();
             final Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vib.vibrate(500);
-
+            //ringtone();
             MainActivity activity=MainActivity.instance;
-               if(activity==null){
-               Intent intent = new Intent(ShakeService.this, LoginActivity.class);
+               if(activity==null||activity.isFinishing()){
+               Intent intent = new Intent(ShakeService.this, MainActivity.class);
                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP); // You need this if starting
                //  the activity from a service
                intent.setAction(Intent.ACTION_MAIN);
@@ -59,7 +62,7 @@ public class ShakeService extends Service implements ShakeListener.OnShakeListen
                        public void run() {
                            MainActivity.instance.alertD();
                        }
-                   }, 3000);
+                   }, 2000);
 
            }
            else{

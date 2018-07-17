@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".selContacts"
-    android:background="@drawable/gradient"
+    android:background="#CBE2F2"
     >
 
     <android.support.v7.widget.RecyclerView

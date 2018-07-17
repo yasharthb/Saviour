@@ -12,6 +12,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
 
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
@@ -103,7 +108,16 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".AboutUs"></activity>
+        <activity android:name=".AboutUs"
+            android:label="About us">
+        </activity>
+
+
+        <activity android:name=".MqttConnect">
+        </activity>
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+
     </application>
 
 </manifest>

@@ -19,7 +19,7 @@
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/automatic"
-            android:title="Automatic Tracking" />
+            android:title="IoT Status" />
     </group>
 
     <item android:title="Communicate">

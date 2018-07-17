@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,9 +55,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +70,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
+
+
     static MainActivity instance;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
@@ -84,6 +95,8 @@ public class MainActivity extends AppCompatActivity
     ShakeService mShakeService;
     static boolean flag=false;
     Context ctx;
+    Uri notification;
+    Ringtone r;
     String[] permissions= new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -95,6 +108,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.SEND_SMS
     };
+    MqttHelper mqttHelper;
 
     public Context getCtx() {
         return ctx;
@@ -147,6 +161,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        try {
+            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
 //        if(checkPermissions()){
@@ -180,6 +201,7 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load( LoginActivity.gAccount.getPhotoUrl()).into(imageview);
         }
 
+        startMqtt();
     }
 
     @Override
@@ -257,9 +279,9 @@ public class MainActivity extends AppCompatActivity
            startActivity(new Intent(MainActivity.this, MapsActivity.class));
 
         } else if (id == R.id.nav_manage) {
-         startService(new Intent(MainActivity.this,ShakeService.class));
+            startActivity(new Intent(MainActivity.this,MqttConnect.class) );
         } else if (id == R.id.nav_share) {
-            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+            startActivity(new Intent(MainActivity.this,AboutUs.class));
 
         } else if (id == R.id.nav_send) {
             LoginActivity.mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -387,17 +409,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //////////////////////////////////////
-    // code you want.
-
-
-//    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//    Manifest.permission.READ_CONTACTS,
-//    Manifest.permission.READ_EXTERNAL_STORAGE,
-//    Manifest.permission.GET_ACCOUNTS,
-
-
-    //  permissions  granted.
 
 
     protected   boolean checkPermissions() {
@@ -500,7 +511,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.LENGTH_SHORT).show();
         }
         //phoneNo = "7080104648;
-        message = "Please Help Me at Location provided in the Link :\n"+URL;
+        message = "Emergency!!!\nPlease Help Me at Location provided in the Link :\n"+URL+"\n"+LoginActivity.gAccount.getDisplayName();
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -514,7 +525,7 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             SmsManager smsManager = SmsManager.getDefault();
-            for(j=0;(phn[j] != null)&&(j<10);j++) {
+            for(j=0;(phn[j] != null)&&(j<40);j++) {
                 smsManager.sendTextMessage(phn[j], null, message, null, null);
             }
             Toast.makeText(getApplicationContext(), "SMS sent to "+j+" Contacts",
@@ -525,6 +536,7 @@ public class MainActivity extends AppCompatActivity
     protected void alertD() {
         count=0;
         result=false;
+        r.play();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Send Emergency Messages Alert");
         builder.setMessage("After 45 seconds Emergency Contacts will be notified automatically!");
@@ -533,6 +545,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int id) {
                 count=1;
                 sendSMSMessage();
+                r.stop();
             }
         });
 
@@ -540,22 +553,53 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 result=true;
+                r.stop();
+
 
             }
         });
 
         final AlertDialog dlg = builder.create();
-
         dlg.show();
         new Handler().postDelayed(new Runnable() {
 
             public void run() {
                 dlg.dismiss();
+                r.stop();
                 if((!result)&&(count==0))
-                sendSMSMessage();
+                    sendSMSMessage();
             }
-        }, 5000);
+        }, 10000);
+    }
 
+
+    private void startMqtt() {
+
+
+        mqttHelper = new MqttHelper(getApplicationContext());
+        mqttHelper.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean b, String s) {
+
+            }
+
+            @Override
+            public void connectionLost(Throwable throwable) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+                Log.w("Debug", mqttMessage.toString());
+                sendSMSMessage();
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+            }
+        });
     }
 
 }
